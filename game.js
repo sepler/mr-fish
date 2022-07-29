@@ -184,6 +184,6 @@ class LastFish {
     this.rarity = rarity;
     this.points = points;
     this.expired = false;
-    this.expiresAt = Date.now() + (5 * 60000); // 5 min
+    this.expiresAt = Date.now() + (15 * 60000); // 15 min
   }
 }
