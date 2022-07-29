@@ -1,0 +1,52 @@
+{
+  "players": {
+    "264281696621428736": {
+      "id": "264281696621428736",
+      "username": "sepler",
+      "score": 3564,
+      "cooldown": 1659077113946,
+      "lastFish": {
+        "rarity": "Common",
+        "points": 4,
+        "expired": true,
+        "expiresAt": 1659075613946
+      }
+    },
+    "531612455751909402": {
+      "id": "531612455751909402",
+      "username": "moodymathis",
+      "score": 530,
+      "cooldown": 1659024721370
+    },
+    "649100981317140482": {
+      "id": "649100981317140482",
+      "username": "bren9",
+      "score": 4131,
+      "cooldown": 1659077125918,
+      "lastFish": {
+        "rarity": "Retarded",
+        "points": 0,
+        "expired": true,
+        "expiresAt": 1659075625918
+      }
+    },
+    "556279102269685764": {
+      "id": "556279102269685764",
+      "username": "Doctor Biaggios",
+      "score": 5032,
+      "cooldown": 1659075113865,
+      "lastFish": {
+        "rarity": "Common",
+        "points": 45,
+        "expired": false,
+        "expiresAt": 1659073613865
+      }
+    },
+    "408734237848502283": {
+      "id": "408734237848502283",
+      "username": "Deanboi469",
+      "score": 83,
+      "cooldown": 1659034313826
+    }
+  }
+}
