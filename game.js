@@ -28,7 +28,7 @@ export function fish(user) {
   if (Date.now() < player.cooldown) {
     const remainingMin = ((player.cooldown - currTime) / 60000).toFixed(1);
     return {
-      content: "PLEASE WAIT UNTIL FISH TIME: " + remainingMin + " minutes",
+      content: "chill bro you can’t fish yet: " + remainingMin + " minutes",
       flags: InteractionResponseFlags.EPHEMERAL
     };
   }
@@ -79,14 +79,14 @@ export function doubleOrNothing(user) {
     player.lastFish.expired = true;
     updatePlayer(player);
     return {
-      content: `Doubled! Caught another ${player.lastFish.rarity} fish (${player.lastFish.points}).\nTotal score: ${player.score}`
+      content: `Doubled 📈 Caught another ${player.lastFish.rarity} fish (${player.lastFish.points}).\nTotal score: ${player.score}`
     };
   } else {
     player.score -= player.lastFish.points
     player.lastFish.expired = true;
     updatePlayer(player);
     return {
-      content: `Oops! Lost your catch of a ${player.lastFish.rarity} fish (-${player.lastFish.points}).\nTotal score: ${player.score}`
+      content: `Oops 📉 Lost your catch of a ${player.lastFish.rarity} fish (-${player.lastFish.points}).\nTotal score: ${player.score}`
     };
   }
 }
