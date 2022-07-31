@@ -36,7 +36,7 @@ export function fish(user) {
   const points = getPoints(rarity);
   const emoji = getEmoji(rarity);
   player.score += points;
-  player.cooldown = Date.now() + (30 * 60000);
+  player.cooldown = Date.now() + (45 * 60000); // 45min
   player.lastFish = new LastFish(rarity, points);
   updatePlayer(player);
   return {
