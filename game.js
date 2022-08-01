@@ -1,29 +1,21 @@
-import { join, dirname } from 'path'
-import { Low, JSONFile } from 'lowdb'
-import { fileURLToPath } from 'url'
 import { getRandomInt } from './utils.js';
 import {
   MessageComponentTypes,
   InteractionResponseFlags,
   ButtonStyleTypes
 } from 'discord-interactions';
+import PlayerDao from './PlayerDao.js';
+import LastFish from './LastFish';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-// Use JSON file for storage
-const file = join(__dirname, 'db.json');
-const adapter = new JSONFile(file);
-const db = new Low(adapter);
-
-await db.read();
-db.data ||= {players: {}};
+const playerDao = new PlayerDao();
 
 export function leaderboard() {
-  return 'The Big Fish:\n' + buildLeaderboard(db.data.players);
+  return 'disabled';
+  //return 'The Big Fish:\n' + buildLeaderboard(db.data.players);
 }
 
 export function fish(user) {
-  const player = getPlayer(user);
+  const player = playerDao.getPlayer(user.id) ?? playerDao.createPlayer(user.id, user.username);
   const currTime = Date.now();
   if (Date.now() < player.cooldown) {
     const remainingMin = ((player.cooldown - currTime) / 60000).toFixed(1);
@@ -38,7 +30,7 @@ export function fish(user) {
   player.score += points;
   player.cooldown = Date.now() + (45 * 60000); // 45min
   player.lastFish = new LastFish(rarity, points);
-  updatePlayer(player);
+  playerDao.updatePlayer(player);
   return {
     content: `Caught a ${rarity} fish ${emoji} (${points}).\nTotal score: ${player.score}`,
     components: [
@@ -59,7 +51,7 @@ export function fish(user) {
 }
 
 export function doubleOrNothing(user) {
-  const player = getPlayer(user);
+  const player = playerDao.getPlayer(user.id);
   if (player.lastFish.expired) {
     return {
       content: 'Opportunity expired',
@@ -68,7 +60,7 @@ export function doubleOrNothing(user) {
   }
   if (Date.now() > player.lastFish.expiresAt) {
     player.lastFish.expired = true;
-    updatePlayer(player);
+    playerDao.updatePlayer(player);
     return {
       content: 'Opportunity expired',
       flags: InteractionResponseFlags.EPHEMERAL
@@ -77,14 +69,14 @@ export function doubleOrNothing(user) {
   if (getRandomInt(0, 2) === 0) {
     player.score += player.lastFish.points
     player.lastFish.expired = true;
-    updatePlayer(player);
+    playerDao.updatePlayer(player);
     return {
       content: `Doubled 📈 Caught another ${player.lastFish.rarity} fish (${player.lastFish.points}).\nTotal score: ${player.score}`
     };
   } else {
     player.score -= player.lastFish.points
     player.lastFish.expired = true;
-    updatePlayer(player);
+    playerDao.updatePlayer(player);
     return {
       content: `Oops 📉 Lost your catch of a ${player.lastFish.rarity} fish (-${player.lastFish.points}).\nTotal score: ${player.score}`
     };
@@ -110,17 +102,6 @@ function getLeaderboardEmoji(rank) {
   } else {
     return rank+1 + '';
   }
-}
-
-function getPlayer(user) {
-  let player = db.data.players[user.id];
-  player ||= new Player(user.id, user.username);
-  return player;
-}
-
-function updatePlayer(player) {
-  db.data.players[player.id] = player;
-  db.write();
 }
 
 function getRarity() {
@@ -166,24 +147,3 @@ const Rarity = {
   Rare: "Rare",
   Legendary: "Legendary"
 };
-
-class Player {
-  
-  constructor(id, username) {
-    this.id = id;
-    this.username = username;
-    this.score = 0;
-    this.cooldown = 0;
-    this.lastFish = null;
-  }
-}
-
-class LastFish {
-
-  constructor(rarity, points) {
-    this.rarity = rarity;
-    this.points = points;
-    this.expired = false;
-    this.expiresAt = Date.now() + (15 * 60000); // 15 min
-  }
-}

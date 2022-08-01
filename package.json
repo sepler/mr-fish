@@ -16,7 +16,8 @@
     "express": "^4.17.3",
     "lowdb": "^3.0.0",
     "node-emoji": "^1.11.0",
-    "node-fetch": "^3.2.3"
+    "node-fetch": "^3.2.3",
+    "pg": "^8.7.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
