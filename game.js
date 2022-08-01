@@ -125,9 +125,9 @@ function updatePlayer(player) {
 
 function getRarity() {
   const rand = getRandomInt(0, 100);
-  if (rand < 50) { // 50%
+  if (rand < 45) { // 45%
     return Rarity.Retarded;
-  } else if (rand < 80) { // 30%
+  } else if (rand < 80) { // 35%
     return Rarity.Common;
   } else if (rand < 95) { // 15%
     return Rarity.Rare;
