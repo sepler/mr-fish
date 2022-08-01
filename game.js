@@ -15,8 +15,13 @@ export function leaderboard() {
 }
 
 export function fish(user) {
-  console.log('entering fish');
-  const player = playerDao.getPlayer(user.id) ?? playerDao.createPlayer(user.id, user.username);
+  let player;
+  const playerMaybe = playerDao.getPlayer(user.id);
+  if (playerMaybe != null) {
+    player = playerMaybe;
+  } else {
+    player = playerDao.createPlayer(user.id, user.username);
+  }
   const currTime = Date.now();
   if (Date.now() < player.cooldown) {
     const remainingMin = ((player.cooldown - currTime) / 60000).toFixed(1);
