@@ -15,6 +15,7 @@ export function leaderboard() {
 }
 
 export function fish(user) {
+  console.log('entering fish');
   const player = playerDao.getPlayer(user.id) ?? playerDao.createPlayer(user.id, user.username);
   const currTime = Date.now();
   if (Date.now() < player.cooldown) {
