@@ -20,19 +20,19 @@ export default class PlayerDao {
       return null;
     }
     const row = rows[0];
-    return new Player(row.id, row.username, row.score, row.cooldown, JSON.parse(row.lastFish));
+    return new Player(row.id, row.username, row.score, row.cooldown, JSON.parse(row.last_fish));
   }
 
   async createPlayer(id, username) {
     console.log('Creating player (id, username): ' + id, + ', ' + username);
     const player = new Player(id, username);
     console.log(JSON.stringify(player));
-    await this.pool.query('INSERT INTO players(id, username, score, cooldown, lastFish) VALUES ($1, $2, $3, $4, $5)', [player.id, player.username, player.score, player.cooldown, player.lastFish])
+    await this.pool.query('INSERT INTO players(id, username, score, cooldown, last_fish) VALUES ($1, $2, $3, $4, $5)', [player.id, player.username, player.score, player.cooldown, player.lastFish])
     return player;
   }
 
   async updatePlayer(player) {
     console.log('Updating player: ' + JSON.stringify(player));
-    await this.pool.query('UPDATE players SET username = $1, score = $2, cooldown = $3, lastFish = $4 WHERE id = $5', [player.username, player.score, player.cooldown, player.lastFish, player.id]);
+    await this.pool.query('UPDATE players SET username = $1, score = $2, cooldown = $3, last_fish = $4 WHERE id = $5', [player.username, player.score, player.cooldown, player.lastFish, player.id]);
   }
 }
