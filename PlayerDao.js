@@ -22,6 +22,7 @@ export default class PlayerDao {
 
   async createPlayer(id, username) {
     const player = new Player(id, username);
+    console.log(JSON.stringify(player));
     this.pool.query('INSERT INTO players(id, username, score, cooldown, lastFish) VALUES ($1, $2, $3, $4, $5)', [player.id, player.username, player.score, player.cooldown, player.lastFish])
     return player;
   }
