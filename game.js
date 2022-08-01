@@ -14,13 +14,13 @@ export function leaderboard() {
   //return 'The Big Fish:\n' + buildLeaderboard(db.data.players);
 }
 
-export function fish(user) {
+export async function fish(user) {
   let player;
-  const playerMaybe = playerDao.getPlayer(user.id);
+  const playerMaybe = await playerDao.getPlayer(user.id);
   if (playerMaybe != null) {
     player = playerMaybe;
   } else {
-    player = playerDao.createPlayer(user.id, user.username);
+    player = await playerDao.createPlayer(user.id, user.username);
   }
   const currTime = Date.now();
   if (Date.now() < player.cooldown) {
@@ -36,7 +36,7 @@ export function fish(user) {
   player.score += points;
   player.cooldown = Date.now() + (45 * 60000); // 45min
   player.lastFish = new LastFish(rarity, points);
-  playerDao.updatePlayer(player);
+  await playerDao.updatePlayer(player);
   return {
     content: `Caught a ${rarity} fish ${emoji} (${points}).\nTotal score: ${player.score}`,
     components: [
@@ -56,8 +56,8 @@ export function fish(user) {
   };
 }
 
-export function doubleOrNothing(user) {
-  const player = playerDao.getPlayer(user.id);
+export async function doubleOrNothing(user) {
+  const player = await playerDao.getPlayer(user.id);
   if (player.lastFish.expired) {
     return {
       content: 'Opportunity expired',
@@ -66,7 +66,7 @@ export function doubleOrNothing(user) {
   }
   if (Date.now() > player.lastFish.expiresAt) {
     player.lastFish.expired = true;
-    playerDao.updatePlayer(player);
+    await playerDao.updatePlayer(player);
     return {
       content: 'Opportunity expired',
       flags: InteractionResponseFlags.EPHEMERAL
@@ -75,14 +75,14 @@ export function doubleOrNothing(user) {
   if (getRandomInt(0, 2) === 0) {
     player.score += player.lastFish.points
     player.lastFish.expired = true;
-    playerDao.updatePlayer(player);
+    await playerDao.updatePlayer(player);
     return {
       content: `Doubled 📈 Caught another ${player.lastFish.rarity} fish (${player.lastFish.points}).\nTotal score: ${player.score}`
     };
   } else {
     player.score -= player.lastFish.points
     player.lastFish.expired = true;
-    playerDao.updatePlayer(player);
+    await playerDao.updatePlayer(player);
     return {
       content: `Oops 📉 Lost your catch of a ${player.lastFish.rarity} fish (-${player.lastFish.points}).\nTotal score: ${player.score}`
     };
