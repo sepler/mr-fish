@@ -20,7 +20,7 @@ export default class PlayerDao {
       return null;
     }
     const row = rows[0];
-    return new Player(row.id, row.username, row.score, row.cooldown, JSON.parse(row.last_fish));
+    return new Player(row.id, row.username, row.score, row.cooldown, row.last_fish);
   }
 
   async createPlayer(id, username) {
