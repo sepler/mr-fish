@@ -5,7 +5,7 @@ import {
   ButtonStyleTypes
 } from 'discord-interactions';
 import PlayerDao from './PlayerDao.js';
-import LastFish from './LastFish';
+import LastFish from './LastFish.js';
 
 const playerDao = new PlayerDao();
 

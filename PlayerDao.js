@@ -1,13 +1,13 @@
-import Pool from 'pg';
-import Player from './Player';
+import pg from 'pg';
+import Player from './Player.js';
 
 export default class PlayerDao {
   constructor() {
-    this.pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false
-    }
+    this.pool = new pg.Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false
+      }
     });
   }
 
