@@ -45,7 +45,7 @@ app.post('/interactions', async function (req, res) {
     if (name === 'fish') {
         return res.send({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: fish(user)
+          data: await fish(user)
         });
     }
 
@@ -75,7 +75,7 @@ app.post('/interactions', async function (req, res) {
       }
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: doubleOrNothing(user),
+        data: await doubleOrNothing(user),
       });
     }
   }
