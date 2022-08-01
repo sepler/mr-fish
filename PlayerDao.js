@@ -14,6 +14,7 @@ export default class PlayerDao {
   async getPlayer(id) {
     console.log('Getting player by id: ' + id);
     const { rows } = await this.pool.query('SELECT * FROM players WHERE id = $1', [id]);
+    console.log(rows);
     if (rows.length === 0) {
       console.log('No player found for id: ' + id);
       return null;
