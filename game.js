@@ -10,8 +10,7 @@ import LastFish from './LastFish.js';
 const playerDao = new PlayerDao();
 
 export function leaderboard() {
-  return 'disabled';
-  //return 'The Big Fish:\n' + buildLeaderboard(db.data.players);
+  return 'The Big Fish:\n' + buildLeaderboard(await playerDao.listByScore(20));
 }
 
 export async function fish(user) {
@@ -90,10 +89,7 @@ export async function doubleOrNothing(user) {
 }
 
 function buildLeaderboard(players) {
-  const sortedPlayers = Object.values(players).sort((a, b) => {
-    return b.score - a.score;
-  }).splice(0,20);
-  return sortedPlayers.map((player, i) => {
+  return players.map((player, i) => {
     return `${getLeaderboardEmoji(i)} ${player.username} (${player.score} pts)`;
   }).join('\n');
 }
