@@ -111,9 +111,9 @@ function getLeaderboardEmoji(rank: number): string {
 
 function getRarity(): Rarity {
   const rand = getRandomInt(0, 100);
-  if (rand < 45) { // 45%
+  if (rand < 40) { // 40%
     return Rarity.Retarded;
-  } else if (rand < 80) { // 35%
+  } else if (rand < 80) { // 40%
     return Rarity.Common;
   } else if (rand < 95) { // 15%
     return Rarity.Rare;
