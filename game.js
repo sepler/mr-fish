@@ -9,9 +9,8 @@ import LastFish from './LastFish.js';
 
 const playerDao = new PlayerDao();
 
-export function leaderboard() {
-  const players = await playerDao.listByScore(20);
-  return 'The Big Fish:\n' + buildLeaderboard(players);
+export async function leaderboard() {
+  return 'The Big Fish:\n' + buildLeaderboard(await playerDao.listByScore(20));
 }
 
 export async function fish(user) {
