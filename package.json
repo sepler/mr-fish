@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "tsc && node dist/app.js",
-    "lint": "eslint . --ext .ts && tsc",
+    "build": "eslint . --ext .ts && tsc",
     "dev": "tsc && nodemon dist/app.js"
   },
   "author": "sepler",
