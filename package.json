@@ -7,8 +7,8 @@
   "scripts": {
     "build": "eslint . --ext .ts && ./node_modules/typescript/bin/tsc",
     "postinstall": "npm run build",
-    "start": "./node_modules/typescript/bin/tsc && node dist/app.js",
-    "dev": "./node_modules/typescript/bin/tsc && nodemon dist/app.js"
+    "start": "node dist/app.js",
+    "dev": "nodemon dist/app.js"
   },
   "author": "sepler",
   "license": "MIT",
