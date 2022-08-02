@@ -5,10 +5,10 @@ import {
   ButtonStyleTypes
 } from 'discord-interactions';
 import PlayerDao from './PlayerDao.js';
-import LastFish from './LastFish.js';
+import LastFish from './models/LastFish.js';
 import { DiscordInteractionMemberUser } from './types/types.js';
-import { Rarity } from './Rarity.js';
-import Player from './Player.js';
+import { Rarity } from './models/Rarity.js';
+import Player from './models/Player.js';
 
 const playerDao = new PlayerDao();
 
