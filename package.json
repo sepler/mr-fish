@@ -2,11 +2,12 @@
   "name": "mr-fish",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "dist/app.js",
   "type": "module",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "tsc && node dist/app.js",
+    "lint": "eslint . --ext .ts && tsc",
+    "dev": "tsc && nodemon dist/app.js"
   },
   "author": "sepler",
   "license": "MIT",
@@ -19,6 +20,13 @@
     "pg": "^8.7.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "@types/express": "^4.17.2",
+    "@types/node": "^16.11.47",
+    "@types/pg": "^8.6.5",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
+    "eslint": "^8.21.0",
+    "nodemon": "^2.0.15",
+    "typescript": "^4.7.4"
   }
 }

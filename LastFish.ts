@@ -1,6 +1,12 @@
-export default class LastFish {
+import { Rarity } from "./Rarity";
 
-  constructor(rarity, points) {
+export default class LastFish {
+  rarity: Rarity;
+  points: number;
+  expired: boolean;
+  expiresAt: number;
+
+  constructor(rarity: Rarity, points: number) {
     this.rarity = rarity;
     this.points = points;
     this.expired = false;

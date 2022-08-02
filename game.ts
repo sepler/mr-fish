@@ -6,6 +6,9 @@ import {
 } from 'discord-interactions';
 import PlayerDao from './PlayerDao.js';
 import LastFish from './LastFish.js';
+import { DiscordInteractionMemberUser } from './types/types.js';
+import { Rarity } from './Rarity.js';
+import Player from './Player.js';
 
 const playerDao = new PlayerDao();
 
@@ -13,8 +16,8 @@ export async function leaderboard() {
   return 'The Big Fish:\n' + buildLeaderboard(await playerDao.listByScore(20));
 }
 
-export async function fish(user) {
-  let player;
+export async function fish(user: DiscordInteractionMemberUser) {
+  let player: Player;
   const playerMaybe = await playerDao.getPlayer(user.id);
   if (playerMaybe != null) {
     player = playerMaybe;
@@ -55,7 +58,7 @@ export async function fish(user) {
   };
 }
 
-export async function doubleOrNothing(user) {
+export async function doubleOrNothing(user: DiscordInteractionMemberUser) {
   const player = await playerDao.getPlayer(user.id);
   if (player.lastFish.expired) {
     return {
@@ -88,13 +91,13 @@ export async function doubleOrNothing(user) {
   }
 }
 
-function buildLeaderboard(players) {
+function buildLeaderboard(players: Player[]): string {
   return players.map((player, i) => {
     return `${getLeaderboardEmoji(i)} ${player.username} (${player.score} pts)`;
   }).join('\n');
 }
 
-function getLeaderboardEmoji(rank) {
+function getLeaderboardEmoji(rank: number): string {
   if (rank == 0) {
     return '🥇';
   } else if (rank == 1) {
@@ -102,11 +105,11 @@ function getLeaderboardEmoji(rank) {
   } else if (rank == 2) {
     return '🥉';
   } else {
-    return rank+1 + '';
+    return `${rank+1}`;
   }
 }
 
-function getRarity() {
+function getRarity(): Rarity {
   const rand = getRandomInt(0, 100);
   if (rand < 45) { // 45%
     return Rarity.Retarded;
@@ -119,7 +122,7 @@ function getRarity() {
   }
 }
 
-function getPoints(rarity) {
+function getPoints(rarity: Rarity): number {
   if (rarity === Rarity.Retarded) {
     return getRandomInt(0, 2);
   } else if (rarity === Rarity.Common) {
@@ -131,7 +134,7 @@ function getPoints(rarity) {
   }
 }
 
-function getEmoji(rarity) {
+function getEmoji(rarity: Rarity): string {
   if (rarity === Rarity.Retarded) {
     return '🦦';
   } else if (rarity === Rarity.Common) {
@@ -142,10 +145,3 @@ function getEmoji(rarity) {
     return '🐠';
   }
 }
-
-const Rarity = {
-  Retarded: "Retarded",
-  Common: "Common",
-  Rare: "Rare",
-  Legendary: "Legendary"
-};
