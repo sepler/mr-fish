@@ -5,9 +5,10 @@
   "main": "dist/app.js",
   "type": "module",
   "scripts": {
-    "start": "tsc && node dist/app.js",
-    "build": "eslint . --ext .ts && tsc",
-    "dev": "tsc && nodemon dist/app.js"
+    "build": "eslint . --ext .ts && ./node_modules/typescript/bin/tsc",
+    "postinstall": "npm run build",
+    "start": "./node_modules/typescript/bin/tsc && node dist/app.js",
+    "dev": "./node_modules/typescript/bin/tsc && nodemon dist/app.js"
   },
   "author": "sepler",
   "license": "MIT",
