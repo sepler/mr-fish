@@ -111,7 +111,9 @@ function getLeaderboardEmoji(rank: number): string {
 
 function getRarity(): Rarity {
   const rand = getRandomInt(0, 100);
-  if (rand < 40) { // 40%
+  if (rand < 10) { // 10%
+    return Rarity.Trash;
+  } else if (rand < 40) { // 30%
     return Rarity.Retarded;
   } else if (rand < 80) { // 40%
     return Rarity.Common;
@@ -123,10 +125,12 @@ function getRarity(): Rarity {
 }
 
 function getPoints(rarity: Rarity): number {
-  if (rarity === Rarity.Retarded) {
-    return getRandomInt(0, 2);
+  if (rarity === Rarity.Trash) {
+    return 0;
+  } else if (rarity === Rarity.Retarded) {
+    return getRandomInt(1, 6);
   } else if (rarity === Rarity.Common) {
-    return getRandomInt(2, 50);
+    return getRandomInt(10, 50);
   } else if (rarity === Rarity.Rare) {
     return getRandomInt(50, 200);
   } else if (rarity === Rarity.Legendary) {
@@ -135,7 +139,9 @@ function getPoints(rarity: Rarity): number {
 }
 
 function getEmoji(rarity: Rarity): string {
-  if (rarity === Rarity.Retarded) {
+  if (rarity === Rarity.Trash) {
+    return '🌿';
+  } else if (rarity === Rarity.Retarded) {
     return '🦦';
   } else if (rarity === Rarity.Common) {
     return '🐟';
