@@ -11,7 +11,7 @@ import {
   BIG_FISH_COMMAND,
   HasGuildCommands,
 } from './commands.js';
-import { fish, leaderboard, doubleOrNothing } from './game.js';
+import { fish, leaderboard, doubleOrNothing, fishDuel } from './game.js';
 import { DiscordInteractionBody } from './types/types.js';
 
 // Create an express app
@@ -42,10 +42,12 @@ app.post('/interactions', (req: Request<Record<string, unknown>, Record<string, 
    * See https://discord.com/developers/docs/interactions/application-commands#slash-commands
    */
   if (type === InteractionType.APPLICATION_COMMAND) {
-    const { name } = data;
+    const command = data.command;
+    const opponent = data.opponent;
+    const wager = data.wager;
     const { user } = member;
 
-    if (name === 'fish') {
+    if (command === 'fish') {
       fish(user)
       .then(output => res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -58,8 +60,23 @@ app.post('/interactions', (req: Request<Record<string, unknown>, Record<string, 
       return;
     }
 
-    if (name === 'bigfish') {
+    if (command === 'bigfish') {
       leaderboard()
+      .then(output => res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: output
+        }
+      }))
+      .catch(error => {
+        console.error(error);
+        res.status(500).send('Unexpected error')
+      });
+      return;
+    }
+
+    if (command === 'fishduel') {
+      fishDuel(user, opponent, wager)
       .then(output => res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {

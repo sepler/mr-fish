@@ -1,7 +1,9 @@
 import { InteractionType } from "discord-interactions"
 
 type DiscordInteractionData = {
-  name: string,
+  command: string,
+  opponent: DiscordInteractionMember,
+  wager: BigInteger,
   custom_id: string
 }
 
