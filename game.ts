@@ -6,7 +6,7 @@ import {
 } from 'discord-interactions';
 import PlayerDao from './PlayerDao.js';
 import LastFish from './models/LastFish.js';
-import { DiscordInteractionMemberUser } from './types/types.js';
+import { DiscordInteractionMember, DiscordInteractionMemberUser } from './types/types.js';
 import { Rarity } from './models/Rarity.js';
 import Player from './models/Player.js';
 
@@ -56,6 +56,10 @@ export async function fish(user: DiscordInteractionMemberUser) {
       }
     ]
   };
+}
+
+export async function fishDuel(user: DiscordInteractionMemberUser, opponent: DiscordInteractionMember, wager:BigInteger) {
+  // how do I test what I did so far?
 }
 
 export async function doubleOrNothing(user: DiscordInteractionMemberUser) {
