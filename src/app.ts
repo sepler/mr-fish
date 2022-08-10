@@ -6,7 +6,7 @@ import express, { Request, Response } from 'express';
 import {
   BIG_FISH_COMMAND, FISH_COMMAND, HasGuildCommands
 } from './commands.js';
-import { doubleOrNothing, fish, leaderboard } from './game.js';
+import FishService from './FishService.js';
 import { DiscordInteractionBody } from './types/types.js';
 import { VerifyDiscordRequest } from './utils.js';
 
@@ -16,6 +16,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
 app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
+
+// Create FishService
+const fishService = new FishService();
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
@@ -42,30 +45,30 @@ app.post('/interactions', (req: Request<Record<string, unknown>, Record<string, 
     const { user } = member;
 
     if (name === 'fish') {
-      fish(user)
-      .then(output => res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: output
-      }))
-      .catch(error => {
-        console.error(error);
-        res.status(500).send('Unexpected error')
-      });
+      fishService.fish(user)
+        .then(output => res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: output
+        }))
+        .catch(error => {
+          console.error(error);
+          res.status(500).send('Unexpected error')
+        });
       return;
     }
 
     if (name === 'bigfish') {
-      leaderboard()
-      .then(output => res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: output
-        }
-      }))
-      .catch(error => {
-        console.error(error);
-        res.status(500).send('Unexpected error')
-      });
+      fishService.leaderboard()
+        .then(output => res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: output
+          }
+        }))
+        .catch(error => {
+          console.error(error);
+          res.status(500).send('Unexpected error')
+        });
       return;
     }
   }
@@ -85,15 +88,15 @@ app.post('/interactions', (req: Request<Record<string, unknown>, Record<string, 
         });
         return;
       }
-      doubleOrNothing(user)
-      .then(output => res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: output,
-      }))
-      .catch(error => {
-        console.error(error);
-        res.status(500).send('Unexpected error')
-      });
+      fishService.doubleOrNothing(user)
+        .then(output => res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: output,
+        }))
+        .catch(error => {
+          console.error(error);
+          res.status(500).send('Unexpected error')
+        });
       return;
     }
   }

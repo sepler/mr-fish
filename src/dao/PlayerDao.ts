@@ -11,6 +11,18 @@ export default class PlayerDao {
         rejectUnauthorized: false
       }
     });
+
+    this.pool.query(`
+      CREATE TABLE IF NOT EXISTS players(
+        id TEXT PRIMARY KEY,
+        username TEXT NOT NULL,
+        score INTEGER NOT NULL,
+        cooldown NUMERIC NOT NULL,
+        last_fish JSON
+      );
+    `).catch(error => {
+      throw error;
+    });
   }
 
   async getPlayer(id: string) {
