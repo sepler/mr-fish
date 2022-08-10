@@ -1,4 +1,5 @@
 import { ButtonStyleTypes, InteractionResponseFlags, MessageComponentTypes } from "discord-interactions";
+import DuelDao from "./dao/DuelDao.js";
 import PlayerDao from "./dao/PlayerDao.js";
 import LastFish from "./models/LastFish.js";
 import Player from "./models/Player.js";
@@ -8,9 +9,11 @@ import { getRandomInt } from "./utils.js";
 
 export default class FishService {
   playerDao: PlayerDao;
+  duelDao: DuelDao
 
   constructor() {
     this.playerDao = new PlayerDao();
+    this.duelDao = new DuelDao();
   }
 
   async fish(user: DiscordInteractionMemberUser) {
