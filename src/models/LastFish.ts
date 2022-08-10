@@ -1,4 +1,4 @@
-import { Rarity } from "./Rarity";
+import { Rarity } from "./Rarity.js";
 
 export default class LastFish {
   rarity: Rarity;

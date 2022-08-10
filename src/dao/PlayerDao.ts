@@ -1,5 +1,5 @@
 import pg from 'pg';
-import Player from './models/Player.js';
+import Player from '../models/Player.js';
 
 export default class PlayerDao {
   pool: pg.Pool;

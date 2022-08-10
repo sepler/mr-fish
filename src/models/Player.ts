@@ -1,4 +1,4 @@
-import LastFish from "./LastFish";
+import LastFish from "./LastFish.js";
 
 export default class Player {
   id: string;

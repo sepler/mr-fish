@@ -1,14 +1,12 @@
-import { getRandomInt } from './utils.js';
 import {
-  MessageComponentTypes,
-  InteractionResponseFlags,
-  ButtonStyleTypes
+  ButtonStyleTypes, InteractionResponseFlags, MessageComponentTypes
 } from 'discord-interactions';
-import PlayerDao from './PlayerDao.js';
 import LastFish from './models/LastFish.js';
-import { DiscordInteractionMemberUser } from './types/types.js';
-import { Rarity } from './models/Rarity.js';
 import Player from './models/Player.js';
+import { Rarity } from './models/Rarity.js';
+import PlayerDao from './dao/PlayerDao.js';
+import { DiscordInteractionMemberUser } from './types/types.js';
+import { getRandomInt } from './utils.js';
 
 const playerDao = new PlayerDao();
 

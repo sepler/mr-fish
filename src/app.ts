@@ -1,18 +1,14 @@
+import {
+  InteractionResponseFlags, InteractionResponseType, InteractionType
+} from 'discord-interactions';
 import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import {
-  InteractionType,
-  InteractionResponseType,
-  InteractionResponseFlags
-} from 'discord-interactions';
-import { VerifyDiscordRequest, } from './utils.js';
-import {
-  FISH_COMMAND,
-  BIG_FISH_COMMAND,
-  HasGuildCommands,
+  BIG_FISH_COMMAND, FISH_COMMAND, HasGuildCommands
 } from './commands.js';
-import { fish, leaderboard, doubleOrNothing } from './game.js';
+import { doubleOrNothing, fish, leaderboard } from './game.js';
 import { DiscordInteractionBody } from './types/types.js';
+import { VerifyDiscordRequest } from './utils.js';
 
 // Create an express app
 const app = express();
