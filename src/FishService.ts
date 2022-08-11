@@ -133,7 +133,7 @@ function getEmoji(rarity: Rarity): string {
   } else if (rarity === Rarity.Common) {
     return '🐟';
   } else if (rarity === Rarity.Uncommon) {
-    return '🐠 ';
+    return '🐠';
   } else if (rarity === Rarity.Rare) {
     return '🐡';
   } else if (rarity === Rarity.Legendary) {
