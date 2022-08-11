@@ -103,7 +103,7 @@ function getRarity(): Rarity {
   const rand = getRandomInt(0, 100);
   if (rand < 5) { // 5%
     return Rarity.Trash;
-  } else if (rand < 54) { // 50%
+  } else if (rand < 55) { // 50%
     return Rarity.Common;
   } else if (rand < 90) { // 35%
     return Rarity.Uncommon;
@@ -118,13 +118,13 @@ function getPoints(rarity: Rarity): number {
   if (rarity === Rarity.Trash) {
     return 0;
   } else if (rarity === Rarity.Common) {
-    return getRandomInt(10, 21);
+    return getRandomInt(10, 20);
   } else if (rarity === Rarity.Uncommon) {
-    return getRandomInt(35, 51);
+    return getRandomInt(35, 50);
   } else if (rarity === Rarity.Rare) {
-    return getRandomInt(100, 251);
+    return getRandomInt(100, 250);
   } else if (rarity === Rarity.Legendary) {
-    return getRandomInt(500, 1001);
+    return getRandomInt(500, 1000);
   }
 }
 function getEmoji(rarity: Rarity): string {
