@@ -103,9 +103,9 @@ function getRarity(): Rarity {
   const rand = getRandomInt(0, 100);
   if (rand < 10) { // 10%
     return Rarity.Trash;
-  } else if (rand < 50) { // 50%
+  } else if (rand < 60) { // 50%
     return Rarity.Common;
-  } else if (rand < 90) { // 30%
+  } else if (rand < 70) { // 30%
     return Rarity.Uncommon;
   } else if (rand < 95) { // 15%
     return Rarity.Rare;
