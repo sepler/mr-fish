@@ -101,11 +101,11 @@ export default class FishService {
 
 function getRarity(): Rarity {
   const rand = getRandomInt(0, 100);
-  if (rand < 10) { // 10%
+  if (rand < 5) { // 5%
     return Rarity.Trash;
-  } else if (rand < 60) { // 50%
+  } else if (rand < 54) { // 50%
     return Rarity.Common;
-  } else if (rand < 90) { // 30%
+  } else if (rand < 90) { // 35%
     return Rarity.Uncommon;
   } else if (rand < 97) { // 7%
     return Rarity.Rare;
@@ -118,13 +118,13 @@ function getPoints(rarity: Rarity): number {
   if (rarity === Rarity.Trash) {
     return 0;
   } else if (rarity === Rarity.Common) {
-    return getRandomInt(10, 20);
+    return getRandomInt(10, 21);
   } else if (rarity === Rarity.Uncommon) {
-    return getRandomInt(35, 50);
+    return getRandomInt(35, 51);
   } else if (rarity === Rarity.Rare) {
-    return getRandomInt(100, 250);
+    return getRandomInt(100, 251);
   } else if (rarity === Rarity.Legendary) {
-    return getRandomInt(500, 1000);
+    return getRandomInt(500, 1001);
   }
 }
 function getEmoji(rarity: Rarity): string {
@@ -137,7 +137,7 @@ function getEmoji(rarity: Rarity): string {
   } else if (rarity === Rarity.Rare) {
     return '🐡';
   } else if (rarity === Rarity.Legendary) {
-    return '⭐🦑⭐';
+    return '⭐🎏⭐';
   }
 function getLeaderboardEmoji(rank: number): string {
   if (rank == 0) {
