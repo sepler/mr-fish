@@ -1,7 +1,7 @@
 export enum Rarity {
     Trash = 'Trash',
-    Retarded = 'Retarded',
-    Common = 'Common',
+    Retarded = 'Common',
+    Common = 'Uncommon',
     Rare = 'Rare',
     Legendary = 'Legendary'
 }
