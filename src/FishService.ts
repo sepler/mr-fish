@@ -103,10 +103,10 @@ function getRarity(): Rarity {
   const rand = getRandomInt(0, 100);
   if (rand < 10) { // 10%
     return Rarity.Trash;
-  } else if (rand < 40) { // 30%
-    return Rarity.Retarded;
-  } else if (rand < 80) { // 40%
+  } else if (rand < 50) { // 50%
     return Rarity.Common;
+  } else if (rand < 90) { // 30%
+    return Rarity.Uncommon;
   } else if (rand < 95) { // 15%
     return Rarity.Rare;
   } else if (rand < 100) { // 5%
@@ -117,9 +117,9 @@ function getRarity(): Rarity {
 function getPoints(rarity: Rarity): number {
   if (rarity === Rarity.Trash) {
     return 0;
-  } else if (rarity === Rarity.Retarded) {
-    return getRandomInt(1, 6);
   } else if (rarity === Rarity.Common) {
+    return getRandomInt(1, 6);
+  } else if (rarity === Rarity.Uncommon) {
     return getRandomInt(10, 50);
   } else if (rarity === Rarity.Rare) {
     return getRandomInt(50, 200);
@@ -131,14 +131,14 @@ function getPoints(rarity: Rarity): number {
 function getEmoji(rarity: Rarity): string {
   if (rarity === Rarity.Trash) {
     return '🌿';
-  } else if (rarity === Rarity.Retarded) {
-    return '🦦';
   } else if (rarity === Rarity.Common) {
-    return '🐟';
+    return '🐟 ';
+  } else if (rarity === Rarity.Uncommon) {
+    return '🐠 ';
   } else if (rarity === Rarity.Rare) {
     return '🐡';
   } else if (rarity === Rarity.Legendary) {
-    return '🐠';
+    return '⭐🦑⭐ ';
   }
 }
 
