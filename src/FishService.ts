@@ -122,7 +122,7 @@ function getPoints(rarity: Rarity): number {
   } else if (rarity === Rarity.Uncommon) {
     return getRandomInt(35, 50);
   } else if (rarity === Rarity.Rare) {
-    return getRandomInt(100, 450);
+    return getRandomInt(100, 250);
   } else if (rarity === Rarity.Legendary) {
     return getRandomInt(500, 1000);
   }
