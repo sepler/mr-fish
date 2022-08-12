@@ -101,6 +101,12 @@ export default class FishService {
   async initiateFishDuel(user: DiscordInteractionMemberUser, opponent: DiscordInteractionMemberUser, wager: number) {
     const player = await this.playerDao.getPlayer(user.id);
     const opponentPlayer = await this.playerDao.getPlayer(opponent.id);
+    if (player === null) {
+      return {
+        content: `You need to fish first`,
+        flags: InteractionResponseFlags.EPHEMERAL
+      };
+    }
     if (opponentPlayer === null) {
       return {
         content: `${opponent.username} needs to fish first`,
