@@ -1,6 +1,7 @@
 import { ButtonStyleTypes, InteractionResponseFlags, MessageComponentTypes } from "discord-interactions";
 import DuelDao from "./dao/DuelDao.js";
 import PlayerDao from "./dao/PlayerDao.js";
+import { DuelStatus } from "./models/DuelStatus.js";
 import LastFish from "./models/LastFish.js";
 import Player from "./models/Player.js";
 import { Rarity } from "./models/Rarity.js";
@@ -9,7 +10,7 @@ import { getRandomInt } from "./utils.js";
 
 export default class FishService {
   playerDao: PlayerDao;
-  duelDao: DuelDao
+  duelDao: DuelDao;
 
   constructor() {
     this.playerDao = new PlayerDao();
@@ -95,6 +96,112 @@ export default class FishService {
     return 'The Big fish:\n' + (await this.playerDao.listByScore(20)).map((player, i) => {
       return `${getLeaderboardEmoji(i)} ${player.username} (${player.score} pts)`;
     }).join('\n');
+  }
+
+  async initiateFishDuel(user: DiscordInteractionMemberUser, opponent: DiscordInteractionMemberUser, wager: number) {
+    const player = await this.playerDao.getPlayer(user.id);
+    const opponentPlayer = await this.playerDao.getPlayer(opponent.id);
+    if (opponentPlayer === null) {
+      return {
+        content: `${opponent.username} needs to fish first`,
+        flags: InteractionResponseFlags.EPHEMERAL
+      };
+    }
+    if (player.score < wager) {
+      return {
+        content: `Your score (${player.score}) must be greater than or equal to the wager (${wager})`,
+        flags: InteractionResponseFlags.EPHEMERAL
+      }
+    }
+    if (opponentPlayer.score < wager) {
+      return {
+        content: `${opponent.username}'s score (${opponentPlayer.score}) must be greater than or equal to the wager (${wager})`,
+        flags: InteractionResponseFlags.EPHEMERAL
+      }
+    }
+    const duel = await this.duelDao.createDuel(player.id, opponentPlayer.id, wager);
+    return {
+      content: `challenged <@${opponentPlayer.id}> to a duel! Wager is ${wager} points`,
+      components: [
+        {
+          type: MessageComponentTypes.ACTION_ROW,
+          components: [
+            {
+              type: MessageComponentTypes.BUTTON,
+              // Value for your app to identify the button
+              custom_id: 'fdi_accepted_' + duel.id,
+              label: 'Accept',
+              style: ButtonStyleTypes.SUCCESS,
+              bar: 'foo'
+            },
+            {
+              type: MessageComponentTypes.BUTTON,
+              // Value for your app to identify the button
+              custom_id: 'fdi_declined_' + duel.id,
+              label: 'Decline',
+              style: ButtonStyleTypes.DANGER,
+            }
+          ],
+          foo: 'bar'
+        }
+      ]
+    }
+  }
+
+  async acceptFishDuel(duelId: string) {
+    const duel = await this.duelDao.getDuel(duelId);
+    if (duel.status === DuelStatus.Proposed) {
+      const player = await this.playerDao.getPlayer(duel.playerId);
+      const opponent = await this.playerDao.getPlayer(duel.opponentId);
+      if (player.score < duel.wager || opponent.score < duel.wager) {
+        duel.status = DuelStatus.Canceled;
+        await this.duelDao.updateDuel(duel);
+        return {
+          content: 'Both players no longer have enough points. Duel canceled.'
+        }
+      }
+      const rand = getRandomInt(0, 2);
+      if (rand === 0) {
+        duel.status = DuelStatus.PlayerWon;
+        player.score += duel.wager;
+        opponent.score -= duel.wager;
+        await this.duelDao.updateDuel(duel);
+        await this.playerDao.updatePlayer(player);
+        await this.playerDao.updatePlayer(opponent);
+        return {
+          content: `${player.username} won the duel and stole ${duel.wager} points!\n${player.username} total score: ${player.score}\n${opponent.username} total score: ${opponent.score}`
+        }
+      } else {
+        duel.status = DuelStatus.OpponentWon;
+        player.score -= duel.wager;
+        opponent.score += duel.wager;
+        await this.duelDao.updateDuel(duel);
+        await this.playerDao.updatePlayer(player);
+        await this.playerDao.updatePlayer(opponent);
+        return {
+          content: `${opponent.username} won the duel and stole ${duel.wager} points!\n${player.username} total score: ${player.score}\n${opponent.username} total score: ${opponent.score}`
+        }
+      }
+    }
+    return {
+      content: 'Duel has already completed.',
+      flags: InteractionResponseFlags.EPHEMERAL
+    }
+  }
+
+  async declineFishDuel(duelId: string) {
+    const duel = await this.duelDao.getDuel(duelId);
+    if (duel.status === DuelStatus.Proposed) {
+      duel.status = DuelStatus.Declined;
+      await this.duelDao.updateDuel(duel);
+      return {
+        content: 'Duel declined.'
+      }
+    }
+    return {
+      content: 'Duel has already completed.',
+      flags: InteractionResponseFlags.EPHEMERAL
+    }
   }
 
 }

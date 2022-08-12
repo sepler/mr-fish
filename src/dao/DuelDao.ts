@@ -16,11 +16,11 @@ export default class DuelDao {
     this.pool.query(`
       CREATE TABLE IF NOT EXISTS duels(
         id TEXT PRIMARY KEY,
-        initiatior_id TEXT NOT NULL,
-        challenged_id TEXT NOT NULL,
+        player_id TEXT NOT NULL,
+        opponent_id TEXT NOT NULL,
         wager INTEGER NOT NULL,
         status TEXT NOT NULL,
-        created_at INTEGER NOT NULL
+        created_at NUMERIC NOT NULL
       );
     `).catch(error => {
       throw error;
@@ -37,10 +37,10 @@ export default class DuelDao {
     return toDuel(rows[0]);
   }
 
-  async createDuel(initiatiorId: string, challengedId: string, wager: number) {
-    const duel = Duel.new(initiatiorId, challengedId, wager);
+  async createDuel(userId: string, opponentId: string, wager: number) {
+    const duel = Duel.new(userId, opponentId, wager);
     console.log(`Creating duel: ${JSON.stringify(duel)}`);
-    await this.pool.query('INSERT INTO duels(id, initiatior_id, challenged_id, wager, status, created_at) VALUES ($1, $2, $3, $4, $5, $6)', [duel.id, duel.initiatiorId, duel.challengedId, duel.wager, duel.status, duel.createdAt])
+    await this.pool.query('INSERT INTO duels(id, player_id, opponent_id, wager, status, created_at) VALUES ($1, $2, $3, $4, $5, $6)', [duel.id, duel.playerId, duel.opponentId, duel.wager, duel.status, duel.createdAt])
     return duel;
   }
 
@@ -53,6 +53,6 @@ export default class DuelDao {
 /*eslint-disable */
 function toDuel(row: any): Duel {
   // eslint-disable-next-line no-unsafe-member-access no-unsafe-argument
-  return new Duel(row.id, row.initiatior_id, row.challenged_id, row.wager, DuelStatus[row.status], row.created_at);
+  return new Duel(row.id, row.player_id, row.opponent_id, row.wager, DuelStatus[row.status], row.created_at);
 }
 /*eslint-enable */

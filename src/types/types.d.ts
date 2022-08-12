@@ -2,7 +2,17 @@ import { InteractionType } from "discord-interactions"
 
 type DiscordInteractionData = {
   name: string,
-  custom_id: string
+  custom_id: string,
+  options: DiscordInteractionDataOption[],
+  resolved: {
+    users: DiscordInteractionMemberUser[]
+  }
+}
+
+type DiscordInteractionDataOption = {
+  name: string,
+  type: number,
+  value: unknown
 }
 
 type DiscordInteractionMember = {
@@ -11,7 +21,8 @@ type DiscordInteractionMember = {
 
 type DiscordInteractionMemberUser = {
   id: string,
-  username: string
+  username: string,
+  bot?: boolean
 }
 
 type DiscordInteractionBody = {
@@ -23,6 +34,7 @@ type DiscordInteractionBody = {
       user: {
         id: string
       }
-    }
+    },
+    mentions: DiscordInteractionMemberUser[]
   }
 }

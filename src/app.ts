@@ -4,10 +4,10 @@ import {
 import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import {
-  BIG_FISH_COMMAND, FISH_COMMAND, HasGuildCommands
+  BIG_FISH_COMMAND, FISH_COMMAND, FISH_DUEL_COMMAND, HasGuildCommands
 } from './commands.js';
 import FishService from './FishService.js';
-import { DiscordInteractionBody } from './types/types.js';
+import { DiscordInteractionBody, DiscordInteractionMemberUser } from './types/types.js';
 import { VerifyDiscordRequest } from './utils.js';
 
 // Create an express app
@@ -71,13 +71,49 @@ app.post('/interactions', (req: Request<Record<string, unknown>, Record<string, 
         });
       return;
     }
+
+    if (name === 'fishduel') {
+      const wager: number = data.options.find(option => 'wager' === option.name).value as number;
+      const opponentId: string = data.options.find(option => 'opponent' === option.name).value as string;
+      const opponent = data.resolved.users[opponentId] as DiscordInteractionMemberUser;
+      if (user.id === opponent.id) {
+        res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: 'You cannot duel yourself',
+            flags: InteractionResponseFlags.EPHEMERAL
+          },
+        });
+        return;
+      }
+      if (opponent.bot === true) {
+        res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: 'You cannot duel bots',
+            flags: InteractionResponseFlags.EPHEMERAL
+          },
+        });
+        return;
+      }
+      fishService.initiateFishDuel(user, opponent, wager)
+        .then(output => res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: output
+        }))
+        .catch(error => {
+          console.error(error);
+          res.status(500).send('Unexpected error')
+        });
+      return;
+    }
   }
   if (type === InteractionType.MESSAGE_COMPONENT) {
     // custom_id set in payload when sending message component
-    const componentId: string = data.custom_id;
+    const customId: string = data.custom_id;
     // user who clicked button
     const { user } = req.body.member;
-    if (componentId === 'fish_double_or_nothing') {
+    if (customId === 'fish_double_or_nothing') {
       if (user.id !== req.body.message.interaction.user.id) {
         res.send({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -99,6 +135,43 @@ app.post('/interactions', (req: Request<Record<string, unknown>, Record<string, 
         });
       return;
     }
+    if (customId.startsWith('fdi_')) {
+      if (user.id !== req.body.message.mentions[0].id) {
+        res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: 'Not your button to press',
+            flags: InteractionResponseFlags.EPHEMERAL
+          },
+        });
+        return;
+      }
+      const splitCustomId = customId.split('_');
+      if (splitCustomId[1] === 'accepted') {
+        fishService.acceptFishDuel(splitCustomId[2])
+          .then(output => res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: output,
+          }))
+          .catch(error => {
+            console.error(error);
+            res.status(500).send('Unexpected error')
+          });
+        return;
+      }
+      if (splitCustomId[1] === 'declined') {
+        fishService.declineFishDuel(splitCustomId[2])
+          .then(output => res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: output,
+          }))
+          .catch(error => {
+            console.error(error);
+            res.status(500).send('Unexpected error')
+          });
+        return;
+      }
+    }
   }
 })
 
@@ -108,6 +181,7 @@ app.listen(PORT, () => {
   // Check if guild commands from commands.json are installed (if not, install them)
   void HasGuildCommands(process.env.APP_ID, process.env.GUILD_ID, [
     FISH_COMMAND,
-    BIG_FISH_COMMAND
+    BIG_FISH_COMMAND,
+    FISH_DUEL_COMMAND
   ]);
 });

@@ -1,5 +1,7 @@
 export enum DuelStatus {
   Proposed = 'Proposed',
-  InitiatorWon = 'InitiatorWon',
-  ChallengedWon = 'ChallengedWon'
+  PlayerWon = 'PlayerWon',
+  OpponentWon = 'OpponentWon',
+  Declined = 'Declined',
+  Canceled = 'Canceled'
 }
