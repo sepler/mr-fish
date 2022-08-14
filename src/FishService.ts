@@ -214,15 +214,15 @@ export default class FishService {
 
 function getRarity(): Rarity {
   const rand = getRandomInt(0, 100);
-  if (rand < 10) { // 10%
+  if (rand < 5) { // 5%
     return Rarity.Trash;
-  } else if (rand < 40) { // 30%
-    return Rarity.Retarded;
-  } else if (rand < 80) { // 40%
+  } else if (rand < 55) { // 50%
     return Rarity.Common;
-  } else if (rand < 95) { // 15%
+  } else if (rand < 90) { // 35%
+    return Rarity.Uncommon;
+  } else if (rand < 97) { // 7%
     return Rarity.Rare;
-  } else if (rand < 100) { // 5%
+  } else if (rand < 100) { // 3%
     return Rarity.Legendary;
   }
 }
@@ -230,31 +230,28 @@ function getRarity(): Rarity {
 function getPoints(rarity: Rarity): number {
   if (rarity === Rarity.Trash) {
     return 0;
-  } else if (rarity === Rarity.Retarded) {
-    return getRandomInt(1, 6);
   } else if (rarity === Rarity.Common) {
-    return getRandomInt(10, 50);
+    return getRandomInt(10, 20);
+  } else if (rarity === Rarity.Uncommon) {
+    return getRandomInt(35, 50);
   } else if (rarity === Rarity.Rare) {
-    return getRandomInt(50, 200);
+    return getRandomInt(100, 250);
   } else if (rarity === Rarity.Legendary) {
-    return getRandomInt(200, 1000);
+    return getRandomInt(500, 1000);
   }
 }
-
 function getEmoji(rarity: Rarity): string {
   if (rarity === Rarity.Trash) {
     return '🌿';
-  } else if (rarity === Rarity.Retarded) {
-    return '🦦';
   } else if (rarity === Rarity.Common) {
     return '🐟';
+  } else if (rarity === Rarity.Uncommon) {
+    return '🐠';
   } else if (rarity === Rarity.Rare) {
     return '🐡';
   } else if (rarity === Rarity.Legendary) {
-    return '🐠';
+    return '⭐🎏⭐';
   }
-}
-
 function getLeaderboardEmoji(rank: number): string {
   if (rank == 0) {
     return '🥇';
